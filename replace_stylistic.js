@@ -1,5 +1,6 @@
 var fs = require('fs');
 var exec = require('child_process').exec;
+var { Parser, Builder } = require('xml2js');
 
 if (process.argv.length < 3) {
   console.log('usage: $ node replace_stylistic.js {fontfile.ttf / fontfile.otf}');
@@ -22,7 +23,13 @@ exec(commandDecompile, async (err, stdout, stderr) => {
   let ttxContent = fs.readFileSync(`${ttxFilePath}.ttx`) + '';
   ttxContent = ttxContent.replace(/\r/g, '').replace(/\uFEFF/g, '').replace(/\n*$/, '');
 
-  // TTXファイルに保存
+  // XML書式からJSONデータに加工
+  const parser = new Parser();
+  const ttxObject = await parser.parseStringPromise(ttxContent);
+
+  // JSONデータをXML書式に書き戻し～TTXファイルに保存
+  const builder = new Builder();
+  ttxContent = builder.buildObject(ttxObject);
   fs.writeFileSync(`${ttxFilePath}_new.ttx`, ttxContent);
 
   // 変更したTTXファイルと元フォントを合成
