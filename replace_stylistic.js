@@ -30,6 +30,7 @@ exec(commandDecompile, async (err, stdout, stderr) => {
   // 文字の置き換え
   enableStylisticSet01(ttxObject);
   enableStylisticSet02(ttxObject);
+  enableStylisticSet19(ttxObject);
 
   // JSONデータをXML書式に書き戻し～TTXファイルに保存
   const builder = new Builder();
@@ -91,3 +92,43 @@ function enableStylisticSet02(ttxObject) {
     }
   });
 }
+
+// zero, ss19 スラッシュゼロからドットゼロに置換
+function enableStylisticSet19(ttxObject) {
+  const charStrings = getCharStrings(ttxObject);
+  let slaStr, dotStr;
+
+  // 通常スタイル数字の置換
+  charStrings.forEach((item) => {
+    if (item.$.name === 'zero') {
+      item.$.name = 'zero.zero';
+      return;
+    }
+    if (item.$.name === 'zero.zero') {
+      item.$.name = 'zero';
+      return;
+    }
+  });
+
+  // 旧字体スタイル数字の置換
+  charStrings.some((item) => {
+    if (item.$.name === 'zero.tosf') {
+      slaStr = item._
+    }
+    if (item.$.name === 'zero.tosf.zero' || item.$.name === 'zero.zero.tosf') {
+      dotStr = item._
+    }
+    return (!!slaStr && !!dotStr) 
+  });
+  charStrings.forEach((item) => {
+    if (item.$.name === 'zero.tosf') {
+      item._ = dotStr
+      return;
+    }
+    if (item.$.name === 'zero.tosf.zero' || item.$.name === 'zero.zero.tosf') {
+      item._ = slaStr
+      return;
+    }
+  });
+}
+
