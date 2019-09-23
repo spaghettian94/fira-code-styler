@@ -1,0 +1,8 @@
+{
+  "name": "fira-code-styler",
+  "version": "0.0.1",
+  "description": "Fira Code stylistic sets converter",
+  "main": "index.js",
+  "license": "MIT",
+  "private": true
+}
