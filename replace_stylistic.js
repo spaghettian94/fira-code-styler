@@ -27,6 +27,9 @@ exec(commandDecompile, async (err, stdout, stderr) => {
   const parser = new Parser();
   const ttxObject = await parser.parseStringPromise(ttxContent);
 
+  // 文字の置き換え
+  enableStylisticSet01(ttxObject);
+
   // JSONデータをXML書式に書き戻し～TTXファイルに保存
   const builder = new Builder();
   ttxContent = builder.buildObject(ttxObject);
@@ -39,3 +42,27 @@ exec(commandDecompile, async (err, stdout, stderr) => {
     console.log(stdout+stderr);
   });
 });
+
+function getCharStrings(ttxObject) {
+  try {
+    return ttxObject.ttFont.CFF[0].CFFFont[0].CharStrings[0].CharString;
+  } catch (err) {
+    console.log("TTX File Parsing Error");
+  }
+}
+
+// ss01 rの字形を置き換える
+function enableStylisticSet01(ttxObject) {
+  const charStrings = getCharStrings(ttxObject);
+
+  charStrings.forEach((item) => {
+    if (item.$.name === 'r') {
+      item.$.name = 'r.ss01';
+      return;
+    }
+    if (item.$.name === 'r.ss01') {
+      item.$.name = 'r';
+      return;
+    }
+  });
+}
