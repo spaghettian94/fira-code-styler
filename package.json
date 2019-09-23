@@ -4,5 +4,9 @@
   "description": "Fira Code stylistic sets converter",
   "main": "index.js",
   "license": "MIT",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "xml-js": "^1.6.11",
+    "xml2js": "^0.4.22"
+  }
 }
