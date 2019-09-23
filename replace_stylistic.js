@@ -29,6 +29,7 @@ exec(commandDecompile, async (err, stdout, stderr) => {
 
   // 文字の置き換え
   enableStylisticSet01(ttxObject);
+  enableStylisticSet02(ttxObject);
 
   // JSONデータをXML書式に書き戻し～TTXファイルに保存
   const builder = new Builder();
@@ -62,6 +63,30 @@ function enableStylisticSet01(ttxObject) {
     }
     if (item.$.name === 'r.ss01') {
       item.$.name = 'r';
+      return;
+    }
+  });
+}
+
+// ss02 >= <= を数式記号に近い形にする
+function enableStylisticSet02(ttxObject) {
+  const charStrings = getCharStrings(ttxObject);
+
+  charStrings.forEach((item) => {
+    if (item.$.name === 'greater_equal.liga') {
+      item.$.name = 'greater_equal.ss02';
+      return;
+    }
+    if (item.$.name === 'greater_equal.ss02') {
+      item.$.name = 'greater_equal.liga';
+      return;
+    }
+    if (item.$.name === 'less_equal.liga') {
+      item.$.name = 'less_equal.ss02';
+      return;
+    }
+    if (item.$.name === 'less_equal.ss02') {
+      item.$.name = 'less_equal.liga';
       return;
     }
   });
