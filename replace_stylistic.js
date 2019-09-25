@@ -14,7 +14,7 @@ const ttxFilePath = `./temp/${originFileName}`;
 const outputPath = originFilePath.replace(/^.*\/(.+)$/, './outputs/$1');
 
 // TTXファイル生成
-const commandDecompile = `ttx -f -x CFF -o ${ttxFilePath}.ttx ${originFilePath}`;
+const commandDecompile = `ttx -f -t CFF -o ${ttxFilePath}.ttx ${originFilePath}`;
 exec(commandDecompile, async (err, stdout, stderr) => {
   console.log(commandDecompile);
   console.log(stdout, stderr);
