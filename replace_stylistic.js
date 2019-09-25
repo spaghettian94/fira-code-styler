@@ -20,9 +20,14 @@ main();
 async function main() {
   // TTXファイル生成
   const commandDecompile = `ttx -f -t CFF -o ${ttxFilePath}.ttx ${originFilePath}`;
-  await exec(commandDecompile).then(({stdout, stderr}) => {
+  await exec(commandDecompile)
+    .then(({stdout, stderr}) => {
     console.log(commandDecompile);
     console.log(stdout, stderr);
+    })
+    .catch((error) => {
+      console.log(error);
+      process.exit(1);
   });
   
   // TTXファイル読込
@@ -45,9 +50,14 @@ async function main() {
   
   // 変更したTTXファイルと元フォントを合成
   const commandCompile = `ttx -o ${outputPath} -m ${originFilePath} ${ttxFilePath}_new.ttx`;
-  await exec(commandCompile).then(({stdout, stderr}) => {
+  await exec(commandCompile)
+  .then(({stdout, stderr}) => {
     console.log(commandCompile);
-    console.log(stdout+stderr);
+    console.log(stdout, stderr);
+  })
+  .catch((error) => {
+    console.log(error);
+    process.exit(1);
   });
 }
 
